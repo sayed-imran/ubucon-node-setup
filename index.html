@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UbuCon India Node Setup</title>
-<meta name="description" content="UbuCon India workshop: set up nvm and Node.js 20.20.1 on Ubuntu, Windows or macOS before the session.">
+<meta name="description" content="UbuCon India workshop: set up nvm and Node.js 22.23.2 on Ubuntu, Windows or macOS before the session.">
 <style>
   :root {
     --bg: #f7f8fa; --surface: #ffffff; --text: #1b1f24; --muted: #5b6470;
@@ -96,11 +96,11 @@
 <body>
 <main>
   <p class="eyebrow">UbuCon India · Workshop pre-setup</p>
-  <h1>Set up nvm + Node.js 20.20.1</h1>
+  <h1>Set up nvm + Node.js 22.23.2</h1>
   <p class="lead">Please finish this <b>before</b> the workshop. It takes about 10–15 minutes. Everyone needs the <b>exact same</b> Node version so the packages behave the same for all of us.</p>
 
   <div class="badges">
-    <span class="badge">Node.js <b>20.20.1</b></span>
+    <span class="badge">Node.js <b>22.23.2</b></span>
     <span class="badge">npm <b>10.x</b> (comes with Node)</span>
     <span class="badge">Installed via <b>nvm</b></span>
     <span class="badge">Best on <b>Ubuntu 22.04 / 24.04 LTS</b></span>
@@ -184,10 +184,10 @@ git config --global core.longpaths true</pre><button class="copy">Copy</button><
       </li>
 
       <li>
-        <h3>Install and use Node 20.20.1</h3>
+        <h3>Install and use Node 22.23.2</h3>
         <p>Open <b>PowerShell as Administrator</b> (nvm-windows needs admin rights to switch versions):</p>
-        <div class="code"><pre>nvm install 20.20.1
-nvm use 20.20.1</pre><button class="copy">Copy</button></div>
+        <div class="code"><pre>nvm install 22.23.2
+nvm use 22.23.2</pre><button class="copy">Copy</button></div>
       </li>
 
       <li>
@@ -227,10 +227,10 @@ nvm use 20.20.1</pre><button class="copy">Copy</button></div>
         <p>If <code>nvm</code> is still "command not found", create the profile file and rerun the install: <code>touch ~/.zshrc</code>.</p>
       </li>
       <li>
-        <h3>Install and use Node 20.20.1</h3>
-        <div class="code"><pre>nvm install 20.20.1
-nvm use 20.20.1
-nvm alias default 20.20.1</pre><button class="copy">Copy</button></div>
+        <h3>Install and use Node 22.23.2</h3>
+        <div class="code"><pre>nvm install 22.23.2
+nvm use 22.23.2
+nvm alias default 22.23.2</pre><button class="copy">Copy</button></div>
       </li>
     </ol>
   </section>
@@ -262,15 +262,15 @@ nvm alias default 20.20.1</pre><button class="copy">Copy</button></div>
         <div class="code"><pre>source ~/.bashrc</pre><button class="copy">Copy</button></div>
       </li>
       <li>
-        <h3>Install and use Node 20.20.1</h3>
-        <div class="code"><pre>nvm install 20.20.1
-nvm use 20.20.1
-nvm alias default 20.20.1</pre><button class="copy">Copy</button></div>
+        <h3>Install and use Node 22.23.2</h3>
+        <div class="code"><pre>nvm install 22.23.2
+nvm use 22.23.2
+nvm alias default 22.23.2</pre><button class="copy">Copy</button></div>
       </li>
     </ol>
     <div class="note warn">
       <strong>Don't use sudo with npm</strong>
-      With nvm, global installs go into your home folder. If <code>npm install -g</code> asks for sudo, nvm isn't active — open a new terminal and run <code>nvm use 20.20.1</code>.
+      With nvm, global installs go into your home folder. If <code>npm install -g</code> asks for sudo, nvm isn't active — open a new terminal and run <code>nvm use 22.23.2</code>.
     </div>
   </section>
 
@@ -280,7 +280,7 @@ nvm alias default 20.20.1</pre><button class="copy">Copy</button></div>
 npm -v
 node -p "process.platform + ' ' + process.arch"</pre><button class="copy">Copy</button></div>
   <p>Expected output:</p>
-  <div class="code"><pre>v20.20.1
+  <div class="code"><pre>v22.23.2
 10.x.x
 win32 x64      (or darwin arm64 / darwin x64 / linux x64)</pre></div>
 
@@ -295,7 +295,7 @@ node -e "require('bcrypt'); console.log('Native modules OK')"</pre><button class
   <h2>Pre-workshop checklist</h2>
   <div class="card">
     <ul class="check">
-      <li><code>node -v</code> prints <code>v20.20.1</code> in a fresh terminal</li>
+      <li><code>node -v</code> prints <code>v22.23.2</code> in a fresh terminal</li>
       <li>The native module smoke test printed <b>Native modules OK</b></li>
       <li>Ubuntu users: no apt/snap Node left over (<code>which -a node</code> shows only an <code>.nvm</code> path)</li>
       <li>Windows users: Windows 11 64-bit, build tools installed</li>
@@ -310,7 +310,7 @@ node -e "require('bcrypt'); console.log('Native modules OK')"</pre><button class
   </details>
   <details>
     <summary><code>node -v</code> shows a different version</summary>
-    <p>Another Node installation is earlier on your PATH. Run <code>where node</code> (Windows) or <code>which -a node</code> (macOS/Linux) and uninstall anything not managed by nvm. Then run <code>nvm use 20.20.1</code> again.</p>
+    <p>Another Node installation is earlier on your PATH. Run <code>where node</code> (Windows) or <code>which -a node</code> (macOS/Linux) and uninstall anything not managed by nvm. Then run <code>nvm use 22.23.2</code> again.</p>
   </details>
   <details>
     <summary>Windows: <code>nvm use</code> says "exit status 1" or "Access is denied"</summary>
@@ -330,8 +330,8 @@ node -e "require('bcrypt'); console.log('Native modules OK')"</pre><button class
   </details>
 
   <div class="note warn">
-    <strong>Why exactly 20.20.1?</strong>
-    The workshop project and its dependencies were tested on this version. Node 20 has reached end-of-life upstream, so we pin it on purpose and use nvm so it doesn't affect any other Node version you use for your own projects. Switch back any time with <code>nvm use &lt;version&gt;</code>.
+    <strong>Why exactly 22.23.2?</strong>
+    The workshop project and its dependencies were tested on this version. We pin it on purpose and use nvm so it doesn't affect any other Node version you use for your own projects. Switch back any time with <code>nvm use &lt;version&gt;</code>.
   </div>
 
   <footer>

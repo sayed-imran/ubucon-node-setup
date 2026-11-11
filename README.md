@@ -1,6 +1,6 @@
 # UbuCon India workshop: Node.js setup page
 
-A single-page guide (`index.html`) that walks attendees through installing **nvm** and **Node.js 20.20.1** on Ubuntu, Windows 11 (Windows 10 is not supported; optional WSL) and macOS.
+A single-page guide (`index.html`) that walks attendees through installing **nvm** and **Node.js 22.23.2** on Ubuntu, Windows 11 (Windows 10 is not supported; optional WSL) and macOS.
 
 ## Publish on GitHub Pages
 

@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UbuCon India Node Setup</title>
+<meta name="description" content="UbuCon India workshop: set up nvm and Node.js 20.20.1 on Ubuntu, Windows or macOS before the session.">
+<style>
+  :root {
+    --bg: #f7f8fa; --surface: #ffffff; --text: #1b1f24; --muted: #5b6470;
+    --border: #dfe3e8; --accent: #c4430f; --accent-soft: #fbece5;
+    --warn: #8a5a00; --warn-bg: #fff6e0; --warn-border: #f0d18a;
+    --danger: #a3261f; --danger-bg: #fdecea; --danger-border: #f2b8b3;
+    --code-bg: #0f172a; --code-text: #e2e8f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1117; --surface: #161b22; --text: #e6edf3; --muted: #9aa5b1;
+      --border: #30363d; --accent: #ff8a50; --accent-soft: #2e1a10;
+      --warn: #f2c66d; --warn-bg: #2b2210; --warn-border: #5c4715;
+      --danger: #ff9b92; --danger-bg: #2d1412; --danger-border: #5e2621;
+      --code-bg: #010409; --code-text: #e6edf3;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 1.35rem; margin: 40px 0 12px; }
+  h3 { font-size: 1.05rem; margin: 28px 0 8px; }
+  p, li { color: var(--text); }
+  .eyebrow { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; margin: 0 0 6px; }
+  .lead { color: var(--muted); font-size: 1.1rem; margin: 0 0 24px; }
+  a { color: var(--accent); }
+  code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .92em; }
+  :not(pre) > code { background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .badge { border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: .9rem; }
+  .badge b { color: var(--accent); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+  .note { border-radius: 8px; padding: 14px 16px; margin: 16px 0; border: 1px solid; }
+  .note.warn { background: var(--warn-bg); border-color: var(--warn-border); }
+  .note.danger { background: var(--danger-bg); border-color: var(--danger-border); }
+  .note strong:first-child { display: block; margin-bottom: 4px; }
+  .note.warn strong:first-child { color: var(--warn); }
+  .note.danger strong:first-child { color: var(--danger); }
+
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-top: 24px; flex-wrap: wrap; }
+  .tab {
+    appearance: none; border: 1px solid transparent; border-bottom: none; background: none;
+    color: var(--muted); padding: 10px 16px; font: inherit; font-weight: 600; cursor: pointer;
+    border-radius: 8px 8px 0 0; margin-bottom: -1px;
+  }
+  .tab[aria-selected="true"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .tab .detected { font-size: .75rem; font-weight: 500; color: var(--accent); margin-left: 6px; }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; padding: 4px 20px 20px; }
+  .panel[hidden] { display: none; }
+
+  ol.steps { padding-left: 0; list-style: none; counter-reset: step; }
+  ol.steps > li { counter-increment: step; position: relative; padding-left: 44px; margin: 22px 0; }
+  ol.steps > li::before {
+    content: counter(step); position: absolute; left: 0; top: 0;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff;
+    display: grid; place-items: center; font-weight: 700; font-size: .9rem;
+  }
+
+  .code { position: relative; margin: 10px 0; }
+  .code pre {
+    margin: 0; background: var(--code-bg); color: var(--code-text); padding: 14px 16px; padding-right: 72px;
+    border-radius: 8px; overflow-x: auto; font-size: .9rem; line-height: 1.5;
+  }
+  .code .label { font-size: .78rem; color: var(--muted); margin-bottom: 4px; display: block; }
+  .copy {
+    position: absolute; top: 8px; right: 8px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0;
+    border-radius: 6px; padding: 4px 10px; font-size: .8rem; cursor: pointer;
+  }
+  .copy:hover { background: #334155; }
+  .label + pre + .copy, .code:has(.label) .copy { top: 30px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  ul.check { list-style: none; padding-left: 0; }
+  ul.check li { padding-left: 28px; position: relative; margin: 8px 0; }
+  ul.check li::before { content: "☐"; position: absolute; left: 0; color: var(--accent); }
+  details { border: 1px solid var(--border); border-radius: 8px; background: var(--surface); padding: 10px 16px; margin: 10px 0; }
+  details summary { cursor: pointer; font-weight: 600; }
+  footer { margin-top: 48px; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--border); padding-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">UbuCon India · Workshop pre-setup</p>
+  <h1>Set up nvm + Node.js 20.20.1</h1>
+  <p class="lead">Please finish this <b>before</b> the workshop. It takes about 10–15 minutes. Everyone needs the <b>exact same</b> Node version so the packages behave the same for all of us.</p>
+
+  <div class="badges">
+    <span class="badge">Node.js <b>20.20.1</b></span>
+    <span class="badge">npm <b>10.x</b> (comes with Node)</span>
+    <span class="badge">Installed via <b>nvm</b></span>
+    <span class="badge">Best on <b>Ubuntu 22.04 / 24.04 LTS</b></span>
+  </div>
+
+  <div class="note danger">
+    <strong>Windows 10 is not supported for this workshop</strong>
+    Some workshop packages compile native code during <code>npm install</code>, and this has failed on Windows 10 before. On Windows, please use <b>Windows 11 (64-bit)</b>. If your laptop runs Windows 10, upgrade to Windows 11, run Ubuntu instead (dual boot or a virtual machine), or contact the organiser <b>before</b> the workshop.
+  </div>
+
+  <h2>Requirements at a glance</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>OS</th><th>Minimum</th><th>Tool</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu (recommended)</td><td>Ubuntu 22.04 or 24.04 LTS, 64-bit (other distros with glibc 2.28+ also work)</td><td>nvm</td></tr>
+        <tr><td>Windows</td><td><b>Windows 11, 64-bit</b> only (Windows 10 is not supported)</td><td>nvm-windows</td></tr>
+        <tr><td>macOS</td><td>macOS 11 Big Sur or newer (Intel or Apple Silicon)</td><td>nvm</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Install for your operating system</h2>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-linux" aria-controls="p-linux" aria-selected="true">Ubuntu / Linux</button>
+    <button class="tab" role="tab" id="tab-windows" aria-controls="p-windows" aria-selected="false">Windows</button>
+    <button class="tab" role="tab" id="tab-mac" aria-controls="p-mac" aria-selected="false">macOS</button>
+  </div>
+
+  <!-- WINDOWS -->
+  <section class="panel" id="p-windows" role="tabpanel" aria-labelledby="tab-windows" hidden>
+    <ol class="steps">
+      <li>
+        <h3>Check your Windows version</h3>
+        <p>Press <code>Win + R</code>, type <code>winver</code>, press Enter. Or run this in PowerShell:</p>
+        <div class="code"><pre>Get-CimInstance Win32_OperatingSystem | Select-Object Caption, BuildNumber, OSArchitecture</pre><button class="copy">Copy</button></div>
+        <p>You need:</p>
+        <ul>
+          <li><b>64-bit</b> Windows</li>
+          <li><b>Windows 11</b>: the name says "Windows 11" and the build number is <code>22000</code> or higher</li>
+        </ul>
+        <div class="note warn">
+          <strong>Seeing Windows 10?</strong>
+          Stop here. Windows 10 is not supported for this workshop. Upgrade to Windows 11 (<b>Settings → Update &amp; Security → Windows Update</b>, if your PC is eligible), switch to the <b>Ubuntu / Linux</b> tab and run Ubuntu instead, or contact the organiser before the workshop.
+        </div>
+      </li>
+
+      <li>
+        <h3>Remove any existing Node.js</h3>
+        <p>nvm-windows will not work properly if Node.js was installed another way.</p>
+        <ul>
+          <li>Open <b>Settings → Apps</b>, find <b>Node.js</b>, and uninstall it.</li>
+          <li>Delete these folders if they still exist: <code>C:\Program Files\nodejs</code>, <code>%AppData%\npm</code>, <code>%AppData%\npm-cache</code></li>
+          <li>Restart your terminal (or the PC).</li>
+        </ul>
+      </li>
+
+      <li>
+        <h3>Install build tools for native packages <small>(don't skip this)</small></h3>
+        <p>This is what most often breaks on Windows: packages that compile C/C++ need Python and the Visual Studio C++ build tools. Open <b>PowerShell as Administrator</b> and run:</p>
+        <div class="code"><pre>winget install --id Microsoft.VisualStudio.2022.BuildTools --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+winget install --id Python.Python.3.12</pre><button class="copy">Copy</button></div>
+        <p>No <code>winget</code>? Install <a href="https://apps.microsoft.com/detail/9NBLGGH4NNS1" target="_blank" rel="noopener">App Installer</a> from the Microsoft Store, or download <a href="https://visualstudio.microsoft.com/visual-cpp-build-tools/" target="_blank" rel="noopener">Build Tools for Visual Studio</a> manually and tick <b>"Desktop development with C++"</b>.</p>
+      </li>
+
+      <li>
+        <h3>Enable long file paths</h3>
+        <p><code>node_modules</code> folders can exceed Windows' 260-character path limit. In <b>PowerShell as Administrator</b>:</p>
+        <div class="code"><pre>New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
+git config --global core.longpaths true</pre><button class="copy">Copy</button></div>
+        <p>(The second line only applies if you have Git installed.)</p>
+      </li>
+
+      <li>
+        <h3>Install nvm-windows</h3>
+        <p>Either use winget:</p>
+        <div class="code"><pre>winget install --id CoreyButler.NVMforWindows</pre><button class="copy">Copy</button></div>
+        <p>Or download <b>nvm-setup.exe</b> from the <a href="https://github.com/coreybutler/nvm-windows/releases/latest" target="_blank" rel="noopener">nvm-windows releases page</a> and run it with the default options.</p>
+        <p><b>Close and reopen</b> your terminal afterwards, then check:</p>
+        <div class="code"><pre>nvm version</pre><button class="copy">Copy</button></div>
+      </li>
+
+      <li>
+        <h3>Install and use Node 20.20.1</h3>
+        <p>Open <b>PowerShell as Administrator</b> (nvm-windows needs admin rights to switch versions):</p>
+        <div class="code"><pre>nvm install 20.20.1
+nvm use 20.20.1</pre><button class="copy">Copy</button></div>
+      </li>
+
+      <li>
+        <h3>Allow npm scripts in PowerShell</h3>
+        <p>If you see <i>"running scripts is disabled on this system"</i> when running <code>npm</code>, run once (normal PowerShell):</p>
+        <div class="code"><pre>Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</pre><button class="copy">Copy</button></div>
+      </li>
+    </ol>
+
+    <details>
+      <summary>Optional: Ubuntu on WSL2 (Linux inside Windows 11)</summary>
+      <p>If native packages still fail on Windows 11, WSL2 gives you a real Ubuntu environment where everything installs cleanly. In <b>PowerShell as Administrator</b>:</p>
+      <div class="code"><pre>wsl --install -d Ubuntu</pre><button class="copy">Copy</button></div>
+      <p>Restart the PC, open <b>Ubuntu</b> from the Start menu, create a user, then follow the <b>Ubuntu / Linux</b> tab instructions inside Ubuntu. Keep your workshop project inside the Linux file system (e.g. <code>~/workshop</code>), not under <code>/mnt/c</code>.</p>
+    </details>
+  </section>
+
+  <!-- MACOS -->
+  <section class="panel" id="p-mac" role="tabpanel" aria-labelledby="tab-mac" hidden>
+    <ol class="steps">
+      <li>
+        <h3>Install Xcode Command Line Tools</h3>
+        <p>Needed for packages that compile native code. Open <b>Terminal</b> and run:</p>
+        <div class="code"><pre>xcode-select --install</pre><button class="copy">Copy</button></div>
+        <p>If it says they're already installed, you're fine.</p>
+      </li>
+      <li>
+        <h3>Remove Homebrew/installer Node (if any)</h3>
+        <p>Check with <code>which node</code>. If it prints a path like <code>/usr/local/bin/node</code> or <code>/opt/homebrew/bin/node</code>, remove it to avoid conflicts:</p>
+        <div class="code"><pre>brew uninstall --ignore-dependencies node 2&gt;/dev/null; which node</pre><button class="copy">Copy</button></div>
+      </li>
+      <li>
+        <h3>Install nvm</h3>
+        <div class="code"><pre>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash</pre><button class="copy">Copy</button></div>
+        <p>Then reload your shell (or just open a new Terminal window):</p>
+        <div class="code"><pre>source ~/.zshrc</pre><button class="copy">Copy</button></div>
+        <p>If <code>nvm</code> is still "command not found", create the profile file and rerun the install: <code>touch ~/.zshrc</code>.</p>
+      </li>
+      <li>
+        <h3>Install and use Node 20.20.1</h3>
+        <div class="code"><pre>nvm install 20.20.1
+nvm use 20.20.1
+nvm alias default 20.20.1</pre><button class="copy">Copy</button></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- LINUX -->
+  <section class="panel" id="p-linux" role="tabpanel" aria-labelledby="tab-linux">
+    <ol class="steps">
+      <li>
+        <h3>Check your Ubuntu version</h3>
+        <div class="code"><pre>lsb_release -ds; uname -m</pre><button class="copy">Copy</button></div>
+        <p>You want <b>Ubuntu 22.04 or 24.04 LTS</b> on <code>x86_64</code> or <code>aarch64</code>. Older releases may work but aren't tested for the workshop.</p>
+      </li>
+      <li>
+        <h3>Remove apt / snap Node (if any)</h3>
+        <p>Node from <code>apt</code> or <code>snap</code> will clash with nvm. Check with <code>which -a node</code>, then remove it:</p>
+        <div class="code"><pre>sudo apt remove -y nodejs npm 2&gt;/dev/null; sudo snap remove node 2&gt;/dev/null; hash -r</pre><button class="copy">Copy</button></div>
+      </li>
+      <li>
+        <h3>Install curl and build tools</h3>
+        <span class="label">Ubuntu / Debian / Ubuntu on WSL</span>
+        <div class="code"><pre>sudo apt update &amp;&amp; sudo apt install -y curl build-essential python3</pre><button class="copy">Copy</button></div>
+        <span class="label">Fedora / RHEL</span>
+        <div class="code"><pre>sudo dnf install -y curl gcc-c++ make python3</pre><button class="copy">Copy</button></div>
+      </li>
+      <li>
+        <h3>Install nvm</h3>
+        <div class="code"><pre>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash</pre><button class="copy">Copy</button></div>
+        <p>Reload your shell (or open a new terminal):</p>
+        <div class="code"><pre>source ~/.bashrc</pre><button class="copy">Copy</button></div>
+      </li>
+      <li>
+        <h3>Install and use Node 20.20.1</h3>
+        <div class="code"><pre>nvm install 20.20.1
+nvm use 20.20.1
+nvm alias default 20.20.1</pre><button class="copy">Copy</button></div>
+      </li>
+    </ol>
+    <div class="note warn">
+      <strong>Don't use sudo with npm</strong>
+      With nvm, global installs go into your home folder. If <code>npm install -g</code> asks for sudo, nvm isn't active — open a new terminal and run <code>nvm use 20.20.1</code>.
+    </div>
+  </section>
+
+  <h2>Verify your setup</h2>
+  <p>Open a <b>new</b> terminal and run:</p>
+  <div class="code"><pre>node -v
+npm -v
+node -p "process.platform + ' ' + process.arch"</pre><button class="copy">Copy</button></div>
+  <p>Expected output:</p>
+  <div class="code"><pre>v20.20.1
+10.x.x
+win32 x64      (or darwin arm64 / darwin x64 / linux x64)</pre></div>
+
+  <h3>Native module smoke test</h3>
+  <p>This confirms native packages can be installed on your machine (the issue we hit last time). Run it in an empty folder:</p>
+  <div class="code"><pre>mkdir node-check &amp;&amp; cd node-check
+npm init -y
+npm install bcrypt --build-from-source
+node -e "require('bcrypt'); console.log('Native modules OK')"</pre><button class="copy">Copy</button></div>
+  <p>If you see <b>Native modules OK</b>, you're ready. You can delete the <code>node-check</code> folder afterwards.</p>
+
+  <h2>Pre-workshop checklist</h2>
+  <div class="card">
+    <ul class="check">
+      <li><code>node -v</code> prints <code>v20.20.1</code> in a fresh terminal</li>
+      <li>The native module smoke test printed <b>Native modules OK</b></li>
+      <li>Ubuntu users: no apt/snap Node left over (<code>which -a node</code> shows only an <code>.nvm</code> path)</li>
+      <li>Windows users: Windows 11 64-bit, build tools installed</li>
+      <li>Laptop charger packed and Wi-Fi working</li>
+    </ul>
+  </div>
+
+  <h2>Troubleshooting</h2>
+  <details>
+    <summary><code>nvm</code> is not recognised / command not found</summary>
+    <p>Close <b>all</b> terminal windows and open a new one. On Windows, sign out and back in if it still fails. On macOS/Linux, check that <code>~/.zshrc</code> or <code>~/.bashrc</code> contains the <code>NVM_DIR</code> lines added by the installer.</p>
+  </details>
+  <details>
+    <summary><code>node -v</code> shows a different version</summary>
+    <p>Another Node installation is earlier on your PATH. Run <code>where node</code> (Windows) or <code>which -a node</code> (macOS/Linux) and uninstall anything not managed by nvm. Then run <code>nvm use 20.20.1</code> again.</p>
+  </details>
+  <details>
+    <summary>Windows: <code>nvm use</code> says "exit status 1" or "Access is denied"</summary>
+    <p>Run the terminal <b>as Administrator</b>. Also make sure your Windows username / nvm install path has no special characters; if it does, reinstall nvm-windows to <code>C:\nvm</code> and set the Node symlink to <code>C:\nodejs</code> during setup.</p>
+  </details>
+  <details>
+    <summary>Windows: <code>gyp ERR!</code>, <code>MSBuild</code> or "Could not find any Visual Studio installation"</summary>
+    <p>The C++ build tools are missing or incomplete. Redo <b>Step 3</b> in the Windows tab, restart the PC, then retry. If it still fails, switch to the Ubuntu on WSL2 option.</p>
+  </details>
+  <details>
+    <summary>Windows: errors mentioning <code>ENAMETOOLONG</code> or paths that are too long</summary>
+    <p>Enable long paths (Step 4 in the Windows tab), restart, and keep projects in a short path like <code>C:\dev\workshop</code>.</p>
+  </details>
+  <details>
+    <summary>Corporate laptop / proxy blocks downloads</summary>
+    <p>Ask your IT team to allow <code>nodejs.org</code>, <code>registry.npmjs.org</code> and <code>github.com</code>, or use a personal laptop for the workshop.</p>
+  </details>
+
+  <div class="note warn">
+    <strong>Why exactly 20.20.1?</strong>
+    The workshop project and its dependencies were tested on this version. Node 20 has reached end-of-life upstream, so we pin it on purpose and use nvm so it doesn't affect any other Node version you use for your own projects. Switch back any time with <code>nvm use &lt;version&gt;</code>.
+  </div>
+
+  <footer>
+    Still stuck? Send a screenshot of the error, the output of <code>node -v</code> and your OS version to the workshop organiser before the session. See you at UbuCon India!
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    function select(tab) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+    }
+    tabs.forEach(function (t) { t.addEventListener('click', function () { select(t); }); });
+
+    // Auto-select the visitor's OS
+    var ua = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || '';
+    ua = ua.toLowerCase();
+    var id = ua.indexOf('win') > -1 ? 'tab-windows'
+           : (ua.indexOf('mac') > -1 ? 'tab-mac'
+           : (ua.indexOf('linux') > -1 ? 'tab-linux' : null));
+    if (id) {
+      var tab = document.getElementById(id);
+      tab.insertAdjacentHTML('beforeend', '<span class="detected">· your OS</span>');
+      select(tab);
+    }
+
+    // Copy buttons
+    document.querySelectorAll('.copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.parentElement.querySelector('pre').innerText;
+        var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () {});
+      });
+    });
+  })();
+</script>
+</body>
+</html>

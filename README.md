@@ -1,6 +1,6 @@
 # Scaling Local AI: Benchmarking vLLM and Building Personal Agents
 
-Pre-setup page for the UbuCon India 2026 workshop.
+Pre-setup page for the UbuCon India 2026 workshop by **Sayed Imran** (15:35–16:35, Workshop Room, AI/ML track).
 
 A single-page guide (`index.html`) that walks attendees through installing **nvm** and **Node.js 22.23.2** on Ubuntu, Windows 11 (Windows 10 is not supported; optional WSL) and macOS.
 
